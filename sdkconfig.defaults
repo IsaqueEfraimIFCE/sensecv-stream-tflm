@@ -1,0 +1,33 @@
+# Defaults for the streaming TFLM harness.
+#
+# UART0 (the CH343/COM12 bridge) is owned by the app's UART driver for the binary
+# protocol, so the ESP console/logs are routed to the USB-Serial-JTAG peripheral and
+# the bootloader is silenced to keep UART0 clean.
+
+# --- Console/logs off UART0 ---
+CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y
+CONFIG_ESP_CONSOLE_SECONDARY_NONE=y
+CONFIG_BOOTLOADER_LOG_LEVEL_NONE=y
+
+# --- Performance build (fast Invoke, like the current-probe variant) ---
+CONFIG_COMPILER_OPTIMIZATION_PERF=y
+CONFIG_COMPILER_OPTIMIZATION_ASSERTIONS_DISABLE=y
+CONFIG_ESP_DEFAULT_CPU_FREQ_MHZ_240=y
+
+# --- PSRAM: OCT, used for the tensor arena and the streamed model buffer ---
+CONFIG_SPIRAM=y
+CONFIG_SPIRAM_MODE_OCT=y
+CONFIG_SPIRAM_TYPE_AUTO=y
+CONFIG_SPIRAM_SPEED_80M=y
+CONFIG_SPIRAM_BOOT_INIT=y
+CONFIG_SPIRAM_USE_MALLOC=y
+# CONFIG_SPIRAM_MEMTEST is not set
+
+# --- Radios off ---
+# CONFIG_BT_ENABLED is not set
+
+# --- 16 MB flash + custom partition (factory app spans the device; models stream) ---
+CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y
+CONFIG_ESPTOOLPY_FLASHSIZE="16MB"
+CONFIG_PARTITION_TABLE_CUSTOM=y
+CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="table.csv"
